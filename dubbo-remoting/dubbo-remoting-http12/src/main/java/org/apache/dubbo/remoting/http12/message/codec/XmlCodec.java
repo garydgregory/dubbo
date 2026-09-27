@@ -22,7 +22,6 @@ import org.apache.dubbo.remoting.http12.exception.HttpStatusException;
 import org.apache.dubbo.remoting.http12.message.HttpMessageCodec;
 import org.apache.dubbo.remoting.http12.message.MediaType;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -37,6 +36,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
+import org.apache.commons.xml.secure.SecureSAXParserFactory;
 import org.xml.sax.InputSource;
 
 public class XmlCodec implements HttpMessageCodec {
@@ -74,13 +74,10 @@ public class XmlCodec implements HttpMessageCodec {
     }
 
     private SAXParser newSAXParser() throws Exception {
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        SAXParserFactory spf = SecureSAXParserFactory.newInstance();
+        // Reject all DOCTYPE declarations, including those containing only internal entities;
+        // SecureSAXParserFactory already blocks external resources and bounds entity expansion.
         spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        spf.setXIncludeAware(false);
         return spf.newSAXParser();
     }
 

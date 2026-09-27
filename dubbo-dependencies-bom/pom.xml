@@ -987,6 +987,11 @@
         <artifactId>jaxb-runtime</artifactId>
         <version>${jaxb-runtime.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-secure-xml</artifactId>
+        <version>1.0.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
